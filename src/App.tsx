@@ -1,69 +1,93 @@
-import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
-import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
 /* ═══════════════════════════════════════════════════════════════
-   TYPES & ANIMATION VARIANTS
+   TYPES & DATA
    ═══════════════════════════════════════════════════════════════ */
 
-type ViewState = 'LOADING' | 'ENVELOPE' | 'LETTER' | 'DASHBOARD'
+type ViewState = 'LOADING' | 'ENVELOPE' | 'LETTER' | 'STORY' | 'FINAL'
 
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay }
-  })
+type SlideType = 'intro' | 'message'
+
+interface SlideData {
+  id: number
+  type: SlideType
+  image: string
+  title?: string
+  subtitle?: string
+  sender?: string
+  message?: string
 }
 
-const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.25 }
+const MEMORY_SLIDES: SlideData[] = [
+  {
+    id: 1,
+    type: 'intro',
+    title: 'Recall Memories',
+    subtitle: 'The moments we carry with us.',
+    // Group photo concept
+    image: 'public/1.jpeg'
+  },
+  {
+    id: 2,
+    type: 'intro',
+    title: 'Pria Solo Nyengir',
+    subtitle: 'CITTYY BOIII',
+    image: 'public/2.jpeg'
+  },
+  {
+    id: 3,
+    type: 'message',
+    sender: 'Stepani',
+    message: "Hai josh‼️ you know who it is, gualah rachel stefanny. Happy birthday yang ke 19 tahun, we’re close to kepala dua! Really glad we could reconnect after some time, its always been great being your friend ever since SD. Semoga di umur yang baru ini you will always be surrounded by good people and may your wish came true! I believe God will always be by your side, or even bestie people HAHAHHA. Stay cringe, stay gaming, stay cool, together we are fnaf. HAPPY BIRTHDAY ONCE AGAIN!!!",
+    image: 'public/3.jpeg'
+  },
+  {
+    id: 4,
+    type: 'message',
+    sender: 'Bradley',
+    message: "HBD city boi, selamat ultah ke 19 unc, officially an uncle, bisa minum susu sekarang, selalu putih jangan menghitam dan siap siap hidup seperti me in japan. Semakin tua artinya lu semakin tua, semoga lu selalu tidur dengan bantal dingin KEDUA sisi, dan gak bakal botak. Kata orang menua itu menakutkan tapi kata gw menua itu mengerikan, jadi takutlah, tapi jangan terlalu takut, ada gw soalnya. Terakhir, jangan cepet mati",
+    image: 'public/4.jpeg'
+  },
+  {
+    id: 5,
+    type: 'message',
+    sender: 'Zefanya',
+    message: "Jehosuwi🐓 hepi birtday yng ke 19 ya brok dari lu yg sekecil 🐣 menjadi segede 🐓 lol. semoga tahun ini bisa menjadi pribadi yg lebih baik ke orang tua, lebih deket sama Tuhan, dan lebih deket lagi sama kita KWWKKW wish u all the best yaw🐴",
+    image: 'public/5.jpeg'
+  },
+  {
+    id: 6,
+    type: 'message',
+    sender: 'Bryant',
+    message: "Habede bub 👉🏻👈🏻, anjay goks wow bgt udh 19 th. Semakin tua harusnya semakin bisa bergadang (harus dibiasakan sblm masuk dunia pekerjaan 😋). Semoga IPK nya 4, lulus suma cumlaude cita citanya tergapai, dan membanggakan orang tua & keluarga Amen! Sekarang wejangan dari gua. Kurangin individualis, apatis, NPD, narsistik, pikmi, caper, freaky, baka nya ya bub. GBUU😋🔥🫰🏻Dari manusia berkarisma tinggi🤵✨",
+    image: 'public/6.jpeg'
+  },
+  {
+    id: 7,
+    type: 'message',
+    sender: 'Ivan',
+    message: "HAPPY BIRTHDAY MANN, Wish u all the best. Sehat selalu, diberkati Tuhan, banyak rezekii, IPK 4, lulus cumlaude, dan membanggakan orang tua & keluarga, kaya raya, punya pent house, tidak gamon",
+    image: 'public/7.jpeg'
+  },
+  {
+    id: 8,
+    type: 'message',
+    sender: 'WenWen',
+    message: "ジェホさん、誕生日おめでとうございます🎉 19歳おめでとう！",
+    image: 'public/8.jpeg'
   }
-}
-
-const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    transition: { duration: 1.2, ease: 'easeOut', delay }
-  })
-}
+]
 
 /* ═══════════════════════════════════════════════════════════════
-   REUSABLE — Scroll Reveal Wrapper
+   ANIMATION VARIANTS
    ═══════════════════════════════════════════════════════════════ */
 
-function ScrollReveal({
-  children,
-  className,
-  variants: v,
-}: {
-  children: ReactNode
-  className?: string
-  variants?: Variants
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-12% 0px' })
 
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      variants={v || fadeInUp}
-    >
-      {children}
-    </motion.div>
-  )
-}
 
 /* ═══════════════════════════════════════════════════════════════
-   PARTICLES — Subtle Floating Dots
+   PARTICLES
    ═══════════════════════════════════════════════════════════════ */
 
 function ParticleField() {
@@ -99,7 +123,7 @@ function ParticleField() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MUSIC PLAYER — Floating Glassmorphic Pill
+   MUSIC PLAYER
    ═══════════════════════════════════════════════════════════════ */
 
 function MusicPlayer({
@@ -142,23 +166,21 @@ function MusicPlayer({
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   1. LOADING SCREEN — Cinematic Entrance
+   1. LOADING SCREEN
    ═══════════════════════════════════════════════════════════════ */
 
 function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    // Smooth progress simulation
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) return 100
-        // Randomize speed slightly for realism
         return prev + Math.random() * 2.5
       })
     }, 50)
 
-    const finishTimer = setTimeout(onComplete, 3500) // Slightly longer for mood
+    const finishTimer = setTimeout(onComplete, 3500)
 
     return () => {
       clearInterval(timer)
@@ -175,7 +197,6 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
       transition={{ duration: 1.2 }}
     >
       <ParticleField />
-
       <div className="loading-screen__content">
         <motion.div
           className="loading-screen__ornament"
@@ -183,7 +204,6 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         />
-
         <motion.h2
           className="loading-screen__text"
           initial={{ opacity: 0, y: 10 }}
@@ -193,7 +213,6 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           Preparing Something Special
         </motion.h2>
 
-        {/* Cinematic Progress Line */}
         <div className="loading-bar-container">
           <motion.div
             className="loading-bar-fill"
@@ -206,7 +225,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   2. ENVELOPE SCREEN — The Birthday Card
+   2. ENVELOPE SCREEN
    ═══════════════════════════════════════════════════════════════ */
 
 function EnvelopeScreen({ onOpen }: { onOpen: () => void }) {
@@ -264,7 +283,7 @@ function EnvelopeScreen({ onOpen }: { onOpen: () => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. LETTER SCREEN — The Centerpiece Moment
+   3. LETTER SCREEN
    ═══════════════════════════════════════════════════════════════ */
 
 function LetterScreen({ onNext }: { onNext: () => void }) {
@@ -290,11 +309,8 @@ function LetterScreen({ onNext }: { onNext: () => void }) {
         transition={{ delay: 0.3, duration: 1, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="letter-paper__date">February 2026</div>
-
         <h1 className="letter-paper__title">For You, On Your Birthday</h1>
-
         <div className="letter-paper__divider" />
-
         <div className="letter-paper__body">
           <p>
             I wanted to make something that lasts longer
@@ -325,189 +341,133 @@ function LetterScreen({ onNext }: { onNext: () => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HERO VISUAL — Elegant SVG Composition
+   4. STORY FLOW — Full Screen Cinematic Experience
    ═══════════════════════════════════════════════════════════════ */
 
-function HeroVisual() {
+function StoryFlow({ onComplete }: { onComplete: () => void }) {
+  const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(0)
+
+  const handleNext = () => {
+    if (index < MEMORY_SLIDES.length - 1) {
+      setDirection(1)
+      setIndex(index + 1)
+    } else {
+      onComplete() // Proceed to Final Screen
+    }
+  }
+
+  const handlePrev = () => {
+    if (index > 0) {
+      setDirection(-1)
+      setIndex(index - 1)
+    }
+  }
+
+  const slide = MEMORY_SLIDES[index]
+  const isIntro = slide.type === 'intro'
+
   return (
-    <div className="hero-visual">
-      <div className="hero-visual__glow" />
-      <svg className="hero-visual__svg" viewBox="0 0 400 400" fill="none">
-        {/* Concentric rings — geometric elegance */}
-        <circle cx="200" cy="200" r="190" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-        <circle cx="200" cy="200" r="160" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
-        <circle cx="200" cy="200" r="130" stroke="rgba(255,255,255,0.05)" strokeWidth="0.75" />
-        <circle cx="200" cy="200" r="100" stroke="rgba(255,255,255,0.06)" strokeWidth="0.75" />
-        <circle cx="200" cy="200" r="70" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-        <circle cx="200" cy="200" r="40" stroke="rgba(196,150,122,0.15)" strokeWidth="1" />
+    <div className="screen story-screen">
+      {/* Background Ambience (Subtle) */}
+      <div className="story-bg" style={{ backgroundImage: `url(${slide.image})` }} />
 
-        {/* Center accent */}
-        <circle cx="200" cy="200" r="6" fill="rgba(196,150,122,0.55)" />
-        <circle cx="200" cy="200" r="15" stroke="rgba(196,150,122,0.2)" strokeWidth="0.75" />
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={slide.id}
+          className="story-page"
+          initial={{ opacity: 0, x: direction * 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: direction * -50 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+          {/* UNIFIED LAYOUT: Left Image, Right Text */}
+          <div className="story-layout">
 
-        {/* Cardinal points */}
-        <circle cx="200" cy="70" r="2" fill="rgba(255,255,255,0.12)" />
-        <circle cx="200" cy="330" r="2" fill="rgba(255,255,255,0.12)" />
-        <circle cx="70" cy="200" r="2" fill="rgba(255,255,255,0.12)" />
-        <circle cx="330" cy="200" r="2" fill="rgba(255,255,255,0.12)" />
+            {/* Left Column: Image */}
+            <div className="story-image-col">
+              <div className="story-image-frame">
+                <img src={slide.image} alt="Memory" loading="lazy" />
+              </div>
+            </div>
 
-        {/* Diagonal accent lines */}
-        <line x1="145" y1="145" x2="125" y2="125" stroke="rgba(196,150,122,0.12)" strokeWidth="0.75" />
-        <line x1="255" y1="255" x2="275" y2="275" stroke="rgba(196,150,122,0.12)" strokeWidth="0.75" />
-        <line x1="255" y1="145" x2="275" y2="125" stroke="rgba(196,150,122,0.12)" strokeWidth="0.75" />
-        <line x1="145" y1="255" x2="125" y2="275" stroke="rgba(196,150,122,0.12)" strokeWidth="0.75" />
+            {/* Right Column: Content */}
+            <div className="story-content-col">
+              {isIntro ? (
+                // Intro Content Style
+                <div className="intro-text-wrapper">
+                  <span className="slide-eyebrow">Chapter {index + 1}</span>
+                  <h1 className="slide-title-large">{slide.title}</h1>
+                  <div className="intro-divider" />
+                  <p className="slide-subtitle-large">{slide.subtitle}</p>
+                </div>
+              ) : (
+                // Message Content Style
+                <div className="message-text-wrapper">
+                  <div className="quote-mark">“</div>
+                  <p className="message-text">{slide.message}</p>
+                  <div className="message-author">
+                    <span className="author-line" />
+                    <span className="author-name">{slide.sender}</span>
+                  </div>
+                </div>
+              )}
+            </div>
 
-        {/* Orbiting dots */}
-        <circle cx="200" cy="40" r="1.5" fill="rgba(196,150,122,0.3)" />
-        <circle cx="360" cy="200" r="1.5" fill="rgba(196,150,122,0.3)" />
-      </svg>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Controls */}
+      <div className="story-nav">
+        <button
+          className="nav-btn prev"
+          onClick={handlePrev}
+          disabled={index === 0}
+          style={{ opacity: index === 0 ? 0.3 : 1, pointerEvents: index === 0 ? 'none' : 'auto' }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+
+        <div className="nav-indicators">
+          {MEMORY_SLIDES.map((_, i) => (
+            <div
+              key={i}
+              className={`nav-dot ${i === index ? 'active' : ''}`}
+            />
+          ))}
+        </div>
+
+        <button className="nav-btn next" onClick={handleNext}>
+          {index === MEMORY_SLIDES.length - 1 ? (
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, padding: '0 4px' }}>FINISH</span>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4–8. DASHBOARD — Full Birthday Story
+   5. FINAL SCREEN — The Closing
    ═══════════════════════════════════════════════════════════════ */
 
-function Dashboard({ onReplay }: { onReplay: () => void }) {
-  const storyCards = [
-    { num: '01', title: 'This Year Felt Like', desc: 'Quiet growth, honest moments, and strength.' },
-    { num: '02', title: 'What Makes You, You', desc: 'Presence, humor, and sincerity.' },
-    { num: '03', title: 'What I Appreciate Most', desc: 'The way you show up, consistently.' },
-    { num: '04', title: 'This Birthday Gift', desc: 'A moment made just for you.' },
-  ]
-
-  const galleryItems = [
-    { gradient: 'linear-gradient(135deg, #3E2B32 0%, #5A3D45 100%)', label: 'Warmth' },
-    { gradient: 'linear-gradient(135deg, #2D3A4A 0%, #1A2530 100%)', label: 'Stillness' },
-    { gradient: 'linear-gradient(135deg, #4A3B30 0%, #3D2E22 100%)', label: 'Golden Hour' },
-    { gradient: 'linear-gradient(135deg, #3A2D3E 0%, #2B1E30 100%)', label: 'Evening' },
-    { gradient: 'linear-gradient(135deg, #2D3E3A 0%, #1A302B 100%)', label: 'Calm' },
-    { gradient: 'linear-gradient(135deg, #4A3D2D 0%, #3E3020 100%)', label: 'Memory' },
-  ]
-
+function FinalScreen({ onReplay }: { onReplay: () => void }) {
   return (
     <motion.div
-      className="dashboard"
+      className="screen final-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.5 }}
+      transition={{ duration: 1.2 }}
     >
-      {/* ── 4. Hero Section ── */}
-      <section className="section hero-section">
-        <div className="container hero-section__inner">
-          <ScrollReveal className="hero-section__content">
-            <motion.p className="hero-section__eyebrow" variants={fadeIn}>
-              A Celebration
-            </motion.p>
-            <motion.h1 className="hero-section__headline" variants={fadeInUp}>
-              Your Birthday,<br />Told Gently.
-            </motion.h1>
-            <motion.p className="hero-section__subtext" variants={fadeInUp} custom={0.15}>
-              A few moments, thoughts, and memories<br />
-              made just for you.
-            </motion.p>
-          </ScrollReveal>
-
-          <ScrollReveal className="hero-section__visual">
-            <HeroVisual />
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ── 5. Story Cards ── */}
-      <section className="section cards-section">
-        <div className="container">
-          <ScrollReveal>
-            <p className="section-eyebrow">Reflections</p>
-            <h2 className="section-title">Moments That Matter</h2>
-          </ScrollReveal>
-
-          <motion.div
-            className="cards-grid"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-8%' }}
-          >
-            {storyCards.map((card, i) => (
-              <motion.div key={i} className="story-card" variants={fadeInUp}>
-                <span className="story-card__num">{card.num}</span>
-                <h3 className="story-card__title">{card.title}</h3>
-                <p className="story-card__desc">{card.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 6. Personal Note ── */}
-      <section className="section note-section">
-        <div className="container">
-          <ScrollReveal className="note-card">
-            <div className="note-card__accent" />
-            <h2 className="note-card__title">A Note for You</h2>
-            <div className="note-card__divider" />
-            <p className="note-card__body">
-              Thank you for being the kind of person
-              who makes things feel lighter just by being there.
-              I'm really glad I get to celebrate you today.
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ── 7. Memory Gallery ── */}
-      <section className="section gallery-section">
-        <div className="container">
-          <ScrollReveal>
-            <p className="section-eyebrow">Gallery</p>
-            <h2 className="section-title">Moments Worth Keeping</h2>
-          </ScrollReveal>
-
-          <motion.div
-            className="gallery-grid"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-5%' }}
-          >
-            {galleryItems.map((item, i) => (
-              <motion.div
-                key={i}
-                className="gallery-item"
-                variants={fadeInUp}
-                style={{ background: item.gradient }}
-              >
-                <div className="gallery-item__overlay">
-                  <span className="gallery-item__label">{item.label}</span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 8. Final Closing ── */}
-      <footer className="section final-section">
-        <ScrollReveal className="final-section__content">
-          <motion.div className="final-section__ornament" variants={fadeIn} />
-          <motion.h1 className="final-section__headline" variants={fadeInUp}>
-            Happy Birthday, Josh.
-          </motion.h1>
-          <motion.p className="final-section__subtext" variants={fadeInUp} custom={0.15}>
-            Made with care, thought, and appreciation.
-          </motion.p>
-          <motion.button
-            className="final-section__btn"
-            onClick={onReplay}
-            variants={fadeInUp}
-            custom={0.3}
-          >
-            Revisit the Letter
-          </motion.button>
-        </ScrollReveal>
-      </footer>
+      <div className="final-content">
+        <div className="final-ornament" />
+        <h1 className="final-title">Happy Birthday, Josh.</h1>
+        <p className="final-subtitle">Made with care, thought, and appreciation.</p>
+        <button className="final-btn" onClick={onReplay}>Revisit the Letter</button>
+      </div>
     </motion.div>
   )
 }
@@ -540,7 +500,6 @@ export default function App() {
 
   const handleEnvelopeOpen = useCallback(() => {
     if (!playing) {
-      // Auto-start music when the letter is opened
       if (!audioRef.current) {
         audioRef.current = new Audio(
           'https://cdn.pixabay.com/audio/2024/11/28/audio_3fce705fa6.mp3'
@@ -555,8 +514,7 @@ export default function App() {
   }, [playing])
 
   return (
-    <div className={`app ${view === 'DASHBOARD' ? 'app--dark' : ''}`}>
-      {/* Floating Music Player — visible after loading */}
+    <div className={`app ${view === 'STORY' ? 'app--dark' : ''}`}>
       {view !== 'LOADING' && (
         <MusicPlayer playing={playing} onToggle={toggleMusic} />
       )}
@@ -572,10 +530,13 @@ export default function App() {
           <EnvelopeScreen key="envelope" onOpen={handleEnvelopeOpen} />
         )}
         {view === 'LETTER' && (
-          <LetterScreen key="letter" onNext={() => setView('DASHBOARD')} />
+          <LetterScreen key="letter" onNext={() => setView('STORY')} />
         )}
-        {view === 'DASHBOARD' && (
-          <Dashboard key="dashboard" onReplay={() => setView('LETTER')} />
+        {view === 'STORY' && (
+          <StoryFlow key="story" onComplete={() => setView('FINAL')} />
+        )}
+        {view === 'FINAL' && (
+          <FinalScreen key="final" onReplay={() => setView('LETTER')} />
         )}
       </AnimatePresence>
     </div>
