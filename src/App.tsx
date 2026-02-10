@@ -159,7 +159,7 @@ function MusicPlayer({
         )}
       </div>
       <span className="music-player__label">
-        {playing ? 'Now Playing' : 'Play Music'}
+        {playing ? 'Now Playing - Persona 3 Color Your Night' : 'Play Music'}
       </span>
     </motion.button>
   )
@@ -465,7 +465,7 @@ function FinalScreen({ onReplay }: { onReplay: () => void }) {
       <div className="final-content">
         <div className="final-ornament" />
         <h1 className="final-title">Happy Birthday, Josh.</h1>
-        <p className="final-subtitle">Made with care, thought, and appreciation.</p>
+        <p className="final-subtitle">yang bikin gua, ipan. hope u like it, dan kalau butuh jasa gua monggo di contact aja HAHHAHAHA @ivanderdniel</p>
         <button className="final-btn" onClick={onReplay}>Revisit the Letter</button>
       </div>
     </motion.div>
@@ -483,9 +483,7 @@ export default function App() {
 
   const toggleMusic = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = new Audio(
-        'https://cdn.pixabay.com/audio/2024/11/28/audio_3fce705fa6.mp3'
-      )
+      audioRef.current = new Audio('/music.mp3')
       audioRef.current.loop = true
       audioRef.current.volume = 0.4
     }
@@ -501,9 +499,7 @@ export default function App() {
   const handleEnvelopeOpen = useCallback(() => {
     if (!playing) {
       if (!audioRef.current) {
-        audioRef.current = new Audio(
-          'https://cdn.pixabay.com/audio/2024/11/28/audio_3fce705fa6.mp3'
-        )
+        audioRef.current = new Audio('/music.mp3')
         audioRef.current.loop = true
         audioRef.current.volume = 0.4
       }
