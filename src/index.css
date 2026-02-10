@@ -1,0 +1,112 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Birthday Gift for Josh
+   Premium · Cinematic · Emotionally Warm
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  /* ── Typography ── */
+  --font-serif: 'Playfair Display', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+
+  /* ── Palette — Premium & Cinematic ── */
+  --bg-dark: #1A1516;
+  --bg-deep: #2D1B22;
+  --bg-midnight: #181920;
+  --bg-charcoal: #1E1A1B;
+
+  --cream: #FAF6F0;
+  --cream-warm: #F5EDE4;
+  --cream-soft: #F2EBE5;
+  --white-paper: #FFFCF8;
+
+  --text-primary: #1A1516;
+  --text-secondary: #665D5E;
+  --text-muted: #9A8E8F;
+  --text-light: #F9F5F0;
+  --text-light-dim: rgba(249, 245, 240, 0.65);
+
+  --accent-burgundy: #7D3C4A;
+  --accent-burgundy-glow: rgba(125, 60, 74, 0.35);
+  --accent-gold: #C4967A;
+  --accent-gold-soft: rgba(196, 150, 122, 0.3);
+  --accent-blush: #E8D5D5;
+  --accent-lavender: #C5B8CB;
+
+  /* ── Shadows ── */
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 12px 40px rgba(45, 27, 34, 0.08);
+  --shadow-elevated: 0 24px 64px rgba(0, 0, 0, 0.12);
+  --shadow-deep: 0 30px 80px rgba(0, 0, 0, 0.25);
+
+  /* ── Transitions ── */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --duration-fast: 0.3s;
+  --duration-normal: 0.6s;
+  --duration-slow: 1s;
+  --duration-cinematic: 1.5s;
+}
+
+/* ── Global Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+::selection {
+  background: rgba(196, 150, 122, 0.25);
+  color: var(--text-primary);
+}
+
+/* ── Scrollbar (Subtle) ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(125, 60, 74, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 60, 74, 0.35);
+}
