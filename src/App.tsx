@@ -27,56 +27,56 @@ const MEMORY_SLIDES: SlideData[] = [
     title: 'Recall Memories',
     subtitle: 'The moments we carry with us.',
     // Group photo concept
-    image: 'public/1.jpeg'
+    image: '/1.jpeg'
   },
   {
     id: 2,
     type: 'intro',
     title: 'Pria Solo Nyengir',
     subtitle: 'CITTYY BOIII',
-    image: 'public/2.jpeg'
+    image: '/2.jpeg'
   },
   {
     id: 3,
     type: 'message',
     sender: 'Stepani',
     message: "Hai josh‼️ you know who it is, gualah rachel stefanny. Happy birthday yang ke 19 tahun, we’re close to kepala dua! Really glad we could reconnect after some time, its always been great being your friend ever since SD. Semoga di umur yang baru ini you will always be surrounded by good people and may your wish came true! I believe God will always be by your side, or even bestie people HAHAHHA. Stay cringe, stay gaming, stay cool, together we are fnaf. HAPPY BIRTHDAY ONCE AGAIN!!!",
-    image: 'public/3.jpeg'
+    image: '/3.jpeg'
   },
   {
     id: 4,
     type: 'message',
     sender: 'Bradley',
     message: "HBD city boi, selamat ultah ke 19 unc, officially an uncle, bisa minum susu sekarang, selalu putih jangan menghitam dan siap siap hidup seperti me in japan. Semakin tua artinya lu semakin tua, semoga lu selalu tidur dengan bantal dingin KEDUA sisi, dan gak bakal botak. Kata orang menua itu menakutkan tapi kata gw menua itu mengerikan, jadi takutlah, tapi jangan terlalu takut, ada gw soalnya. Terakhir, jangan cepet mati",
-    image: 'public/4.jpeg'
+    image: '/4.jpeg'
   },
   {
     id: 5,
     type: 'message',
     sender: 'Zefanya',
     message: "Jehosuwi🐓 hepi birtday yng ke 19 ya brok dari lu yg sekecil 🐣 menjadi segede 🐓 lol. semoga tahun ini bisa menjadi pribadi yg lebih baik ke orang tua, lebih deket sama Tuhan, dan lebih deket lagi sama kita KWWKKW wish u all the best yaw🐴",
-    image: 'public/5.jpeg'
+    image: '/5.jpeg'
   },
   {
     id: 6,
     type: 'message',
     sender: 'Bryant',
     message: "Habede bub 👉🏻👈🏻, anjay goks wow bgt udh 19 th. Semakin tua harusnya semakin bisa bergadang (harus dibiasakan sblm masuk dunia pekerjaan 😋). Semoga IPK nya 4, lulus suma cumlaude cita citanya tergapai, dan membanggakan orang tua & keluarga Amen! Sekarang wejangan dari gua. Kurangin individualis, apatis, NPD, narsistik, pikmi, caper, freaky, baka nya ya bub. GBUU😋🔥🫰🏻Dari manusia berkarisma tinggi🤵✨",
-    image: 'public/6.jpeg'
+    image: '/6.jpeg'
   },
   {
     id: 7,
     type: 'message',
     sender: 'Ivan',
     message: "HAPPY BIRTHDAY MANN, Wish u all the best. Sehat selalu, diberkati Tuhan, banyak rezekii, IPK 4, lulus cumlaude, dan membanggakan orang tua & keluarga, kaya raya, punya pent house, tidak gamon",
-    image: 'public/7.jpeg'
+    image: '/7.jpeg'
   },
   {
     id: 8,
     type: 'message',
     sender: 'WenWen',
     message: "ジェホさん、誕生日おめでとうございます🎉 19歳おめでとう！",
-    image: 'public/8.jpeg'
+    image: '/8.jpeg'
   }
 ]
 
